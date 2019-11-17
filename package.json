@@ -8,7 +8,7 @@
     "server": "nodemon",
     "coverage": "cross-env DB_ENV=testing jest --coverage",
     "docs": "apidoc -i ./ -e node_modules -o ./docs",
-    "start": "apidoc -i ./ -e node_modules -o ./docs && node index.js"
+    "start": "apidoc -i ./ -e node_modules -o ./docs & node index.js"
   },
   "jest": {
     "testEnvironment": "node"
