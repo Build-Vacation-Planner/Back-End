@@ -41,7 +41,7 @@ async function validateRegister(req, res, next) {
     console.log(err);
     res
       .status(500)
-      .json({ error: "Failed to validate user during registering" });
+      .json({ error: "Failed to validate user during registration" });
   }
 }
 
