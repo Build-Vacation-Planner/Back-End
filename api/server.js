@@ -7,5 +7,6 @@ const server = express();
 configureMiddleware(server);
 
 server.use("/api", apiRouter);
+server.use("/docs", express.static("./docs"));
 
 module.exports = server;
