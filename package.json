@@ -9,6 +9,9 @@
     "coverage": "cross-env DB_ENV=testing jest --coverage",
     "docs": "apidoc -i ./ -e node_modules -o ./docs"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Build-Vacation-Planner/Back-End.git"

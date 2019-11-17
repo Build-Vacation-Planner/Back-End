@@ -10,6 +10,7 @@ async function validateRegister(req, res, next) {
     await body("username")
       .exists()
       .withMessage("Username field is required")
+      .bail()
       .not()
       .isEmpty()
       .withMessage("Username cannot be empty")
@@ -17,13 +18,14 @@ async function validateRegister(req, res, next) {
     await body("password")
       .exists()
       .withMessage("Password field is required")
+      .bail()
       .not()
       .isEmpty()
       .withMessage("Password cannot be empty")
       .run(req);
 
     const result = validationResult(req);
-    console.log(result);
+
     if (!result.isEmpty()) {
       return res.status(400).json({ errors: result.array() });
     } else {
@@ -48,6 +50,7 @@ async function validateLogin(req, res, next) {
     await body("username")
       .exists()
       .withMessage("Username field is required")
+      .bail()
       .not()
       .isEmpty()
       .withMessage("Username cannot be empty")
@@ -55,6 +58,7 @@ async function validateLogin(req, res, next) {
     await body("password")
       .exists()
       .withMessage("Password field is required")
+      .bail()
       .not()
       .isEmpty()
       .withMessage("Password cannot be empty")
