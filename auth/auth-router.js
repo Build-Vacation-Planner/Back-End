@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const dbAuth = require("./auth-model");
 const generateToken = require("./generate-token");
+const { validateRegister, validateLogin } = require("./auth-middleware");
 
 /**
  * @api {post} /api/auth/register Register User
@@ -32,7 +33,7 @@ const generateToken = require("./generate-token");
  *
  */
 
-router.post("/register", async (req, res) => {
+router.post("/register", validateRegister, async (req, res) => {
   let { username, password } = req.body;
 
   const hash = bcrypt.hashSync(password, 12);
@@ -74,7 +75,7 @@ router.post("/register", async (req, res) => {
  *
  */
 
-router.post("/login", async (req, res) => {
+router.post("/login", validateLogin, async (req, res) => {
   const { username, password } = req.body;
 
   try {
