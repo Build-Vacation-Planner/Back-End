@@ -14,13 +14,13 @@ const { validateRegister, validateLogin } = require("./auth-middleware");
  * @apiParam {string} username User's name, unique, required
  * @apiParam {string} password User's password, required
  *
- * @apiParamExample {json} Example Body:
+ * @apiParamExample {json} Example Body
  * {
  *   "username": "joker",
  *   "password": "happyface"
  * }
  *
- * @apiExample {js} Example usage:
+ * @apiExample {js} Example usage
  * axios.post("https://vacation-planner-be.herokuapp.com/api/auth/register", {
  *    username: "Joker"
  *    password: "happyface"
@@ -64,13 +64,13 @@ router.post("/register", validateRegister, async (req, res) => {
  * @apiParam {string} username User's name, required
  * @apiParam {string} password User's password, required
  *
- * @apiParamExample {json} Example Body:
+ * @apiParamExample {json} Example Body
  * {
  *   "username": "joker",
  *   "password": "happyface"
  * }
  *
- * @apiExample {js} Example usage:
+ * @apiExample {js} Example usage
  * axios.post("https://vacation-planner-be.herokuapp.com/api/auth/login", {
  *    username: "Joker"
  *    password: "happyface"
