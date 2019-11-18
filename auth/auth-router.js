@@ -47,7 +47,7 @@ router.post("/register", validateRegister, async (req, res) => {
 
   try {
     const user = await dbAuth.add({ username, password });
-    const token = generateToken(username);
+    const token = generateToken(user);
 
     res.status(201).json({ ...user, token });
   } catch (err) {
@@ -94,7 +94,7 @@ router.post("/login", validateLogin, async (req, res) => {
     const user = await dbAuth.getBy({ username });
 
     if (user && bcrypt.compareSync(password, user.password)) {
-      const token = generateToken(user.username);
+      const token = generateToken(user);
 
       res.status(200).json({ message: `Welcome ${user.username}`, token });
     } else {
