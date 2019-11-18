@@ -1,11 +1,12 @@
 const request = require("supertest");
 const bcrypt = require("bcryptjs");
+const cleaner = require("knex-cleaner");
 
 const server = require("../../api/server");
 const db = require("../../data/dbConfig");
 
 beforeEach(async () => {
-  await db("users").truncate();
+  await cleaner.clean(db);
 });
 
 describe("Auth Router", () => {

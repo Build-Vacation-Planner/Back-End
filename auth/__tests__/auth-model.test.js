@@ -1,8 +1,10 @@
+const cleaner = require("knex-cleaner");
+
 const db = require("../../data/dbConfig");
 const dbAuth = require("../auth-model");
 
 beforeEach(async () => {
-  await db("users").truncate();
+  await cleaner.clean(db);
 });
 
 describe("Auth Models", () => {
