@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const dbAuth = require("./auth-model");
 
-module.exports = { validateRegister, validateLogin };
+module.exports = { validateRegister, validateLogin, restricted };
 
 async function validateRegister(req, res, next) {
   try {
