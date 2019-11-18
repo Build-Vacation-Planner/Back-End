@@ -20,6 +20,12 @@ const { validateRegister, validateLogin } = require("./auth-middleware");
  *   "password": "happyface"
  * }
  *
+ * @apiExample {js} Example usage:
+ * axios.post("https://vacation-planner-be.herokuapp.com/api/auth/register", {
+ *    username: "Joker"
+ *    password: "happyface"
+ * })
+ *
  * @apiSuccess (201) {Number} id User's id
  * @apiSuccess (201) {String} username User's name
  * @apiSuccess (201) {String} token User's access token
@@ -63,6 +69,12 @@ router.post("/register", validateRegister, async (req, res) => {
  *   "username": "joker",
  *   "password": "happyface"
  * }
+ *
+ * @apiExample {js} Example usage:
+ * axios.post("https://vacation-planner-be.herokuapp.com/api/auth/login", {
+ *    username: "Joker"
+ *    password: "happyface"
+ * })
  *
  * @apiSuccess (200) {String} message Welcome message
  * @apiSuccess (200) {String} token User's access token
