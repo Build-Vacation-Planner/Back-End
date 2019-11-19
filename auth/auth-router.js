@@ -16,7 +16,7 @@ const { validateRegister, validateLogin } = require("./auth-middleware");
  *
  * @apiParamExample {json} Example Body
  * {
- *   "username": "joker",
+ *   "username": "Joker",
  *   "password": "happyface"
  * }
  *
@@ -33,7 +33,7 @@ const { validateRegister, validateLogin } = require("./auth-middleware");
  * @apiSuccessExample {json} Successful Response
  * {
  *   "id": 8,
- *   "username": "joker",
+ *   "username": "Joker",
  *   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWJpczYiLCJpYXQiOjE1NzM5MjEyMjYsImV4cCI6MTU3NDAwNzYyNn0.lbAqXnl1s1aIK9TgMSFJNt2ej63lfqn_dsDdNpH1ZMs"
  * }
  *
@@ -66,7 +66,7 @@ router.post("/register", validateRegister, async (req, res) => {
  *
  * @apiParamExample {json} Example Body
  * {
- *   "username": "joker",
+ *   "username": "Joker",
  *   "password": "happyface"
  * }
  *
@@ -81,7 +81,7 @@ router.post("/register", validateRegister, async (req, res) => {
  *
  * @apiSuccessExample {json} Successful Response
  * {
- *   "message": "Welcome joker",
+ *   "message": "Welcome Joker",
  *   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWJpczYiLCJpYXQiOjE1NzM5MjEyMjYsImV4cCI6MTU3NDAwNzYyNn0.lbAqXnl1s1aIK9TgMSFJNt2ej63lfqn_dsDdNpH1ZMs"
  * }
  *
