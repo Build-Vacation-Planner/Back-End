@@ -7,11 +7,14 @@ exports.up = function(knex) {
         .notNullable()
         .unique();
       tbl.string("password", 255).notNullable();
+      tbl.string("avatar", 255);
     })
     .createTable("vacations", tbl => {
       tbl.increments();
       tbl.string("name", 255).notNullable();
-      tbl.string("description", 255); //remove this column
+      tbl.string("description", 255);
+      tbl.string("place", 255);
+      tbl.string("picture", 255);
       tbl
         .integer("owner_id")
         .unsigned()
@@ -27,16 +30,6 @@ exports.up = function(knex) {
         .references("users.id")
         .onDelete("cascade")
         .onUpdate("cascade");
-      tbl
-        .integer("vacation_id")
-        .unsigned()
-        .references("vacations.id")
-        .onDelete("cascade")
-        .onUpdate("cascade");
-    })
-    .createTable("places", tbl => {
-      tbl.increments();
-      tbl.string("name", 255).notNullable();
       tbl
         .integer("vacation_id")
         .unsigned()
@@ -68,7 +61,6 @@ exports.up = function(knex) {
     })
     .createTable("comments", tbl => {
       tbl.increments();
-      tbl.string("title", 255).notNullable();
       tbl.text("body").notNullable();
       tbl
         .integer("created_by")
@@ -80,22 +72,6 @@ exports.up = function(knex) {
         .integer("vacation_id")
         .unsigned()
         .references("vacations.id")
-        .onDelete("cascade")
-        .onUpdate("cascade");
-    })
-    .createTable("messages", tbl => {
-      tbl.increments();
-      tbl.text("text").notNullable();
-      tbl
-        .integer("sender_id")
-        .unsigned()
-        .references("users.id")
-        .onDelete("cascade")
-        .onUpdate("cascade");
-      tbl
-        .integer("receiver_id")
-        .unsigned()
-        .references("users.id")
         .onDelete("cascade")
         .onUpdate("cascade");
     });
