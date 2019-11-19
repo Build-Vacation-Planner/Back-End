@@ -1,13 +1,37 @@
+const bcrypt = require("bcryptjs");
+const faker = require("faker");
 
-exports.seed = function(knex) {
-  // Deletes ALL existing entries
-  return knex('table_name').del()
-    .then(function () {
-      // Inserts seed entries
-      return knex('table_name').insert([
-        {id: 1, colName: 'rowValue1'},
-        {id: 2, colName: 'rowValue2'},
-        {id: 3, colName: 'rowValue3'}
-      ]);
-    });
+exports.seed = async function(knex) {
+  return knex("users").insert([
+    {
+      username: faker.name.firstName(),
+      password: `${bcrypt.hashSync("pass", 12)}`,
+      avatar: faker.image.avatar()
+    },
+    {
+      username: faker.name.firstName(),
+      password: `${bcrypt.hashSync("pass", 12)}`,
+      avatar: faker.image.avatar()
+    },
+    {
+      username: faker.name.firstName(),
+      password: `${bcrypt.hashSync("pass", 12)}`,
+      avatar: faker.image.avatar()
+    },
+    {
+      username: faker.name.firstName(),
+      password: `${bcrypt.hashSync("pass", 12)}`,
+      avatar: faker.image.avatar()
+    },
+    {
+      username: faker.name.firstName(),
+      password: `${bcrypt.hashSync("pass", 12)}`,
+      avatar: faker.image.avatar()
+    },
+    {
+      username: faker.name.firstName(),
+      password: `${bcrypt.hashSync("pass", 12)}`,
+      avatar: faker.image.avatar()
+    }
+  ]);
 };
