@@ -11,7 +11,7 @@ exports.up = function(knex) {
     .createTable("vacations", tbl => {
       tbl.increments();
       tbl.string("name", 255).notNullable();
-      tbl.string("description", 255);
+      tbl.string("description", 255); //remove this column
       tbl
         .integer("owner_id")
         .unsigned()
