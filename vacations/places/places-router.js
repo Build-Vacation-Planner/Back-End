@@ -1,8 +1,9 @@
 const router = require("express").Router();
 
 const dbPlaces = require("./places-model");
+const { uniqueEntry } = require("./places-middleware");
 
-router.post("/", async (req, res) => {
+router.post("/", uniqueEntry, async (req, res) => {
   const { name } = req.body;
 
   try {

@@ -1,6 +1,12 @@
 const db = require("../../data/dbConfig");
 
-module.exports = { add, update, remove };
+module.exports = { getBy, add, update, remove };
+
+async function getBy(filter) {
+  return db("places")
+    .where(filter)
+    .first();
+}
 
 async function add(place) {
   const [id] = await db("places")
