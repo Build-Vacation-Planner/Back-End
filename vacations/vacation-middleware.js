@@ -6,7 +6,7 @@ module.exports = { userIsOwner, validateVacation, attachVID };
 
 async function userIsOwner(req, res, next) {
   try {
-    const vacation = await dbVacations.getBy({ id: req.params.id });
+    const vacation = await dbVacations.getBy({ id: req.params.vid });
     if (req.decodedJwt.id != vacation.owner_id) {
       res.status(403).json({
         message: "Sorry only the user that created the vacation can do that"
