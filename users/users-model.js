@@ -24,7 +24,7 @@ async function getUserVacationsIds(uid) {
 
 async function getUsersInVacations(vid, uid) {
   return await db("users as u")
-    .select("u.username", "u.id", "u.avatar")
+    .select("u.id", "u.username", "u.avatar")
     .join("user_vacations as uv", "uv.user_id", "u.id")
     .where("uv.vacation_id", vid)
     .whereNotIn("u.id", [uid]);
@@ -32,7 +32,7 @@ async function getUsersInVacations(vid, uid) {
 
 async function getDates(vid) {
   return db("dates as d")
-    .select("d.start", "d.end")
+    .select("d.id", "d.start", "d.end")
     .join("vacations as v", "v.id", "d.vacation_id")
     .where("v.id", vid)
     .first();
@@ -40,21 +40,22 @@ async function getDates(vid) {
 
 async function getComments(vid) {
   return await db("comments as c")
-    .select("c.body", "c.id")
+    .select("c.id", "c.body", "c.created_by")
     .innerJoin("vacations as v", "v.id", "c.vacation_id")
-    .where("c.vacation_id", vid);
+    .where("c.vacation_id", vid)
+    .orderBy("c.id");
 }
 
 async function getActivities(vid) {
   return await db("activities as a")
-    .select("a.name", "a.description")
+    .select("a.id", "a.name", "a.description")
     .innerJoin("vacations as v", "v.id", "a.vacation_id")
     .where("a.vacation_id", vid);
 }
 
 async function getVacations(vid) {
   return await db("vacations")
-    .select("name", "description", "place", "picture")
+    .select("id", "name", "description", "place", "picture")
     .where("id", vid)
     .first();
 }
