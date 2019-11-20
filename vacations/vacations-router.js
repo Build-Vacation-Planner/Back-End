@@ -126,7 +126,7 @@ router.put("/:vid", userIsOwner, validateVacation, async (req, res) => {
 });
 
 /**
- * @api {put} /api/vacations/:vid Vacations - Delete
+ * @api {delete} /api/vacations/:vid Vacations - Delete
  * @apiName Delete Vacation
  * @apiGroup Vacations
  *
