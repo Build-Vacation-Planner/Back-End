@@ -88,7 +88,7 @@ router.post("/", async (req, res) => {
  * @apiGroup Vacations
  *
  * @apiParam {Number} vid Input vacations's id into the URL
- * @apiParam {Number} id Input date's id into the URL
+ * @apiParam {Number} id Input activity id into the URL
  * @apiParam {String} name Vacation's activity name, required
  * @apiParam {String} description Vacation's activity description, optional
  * @apiHeader {String} authorization user's access token.
@@ -173,7 +173,7 @@ router.put("/:id", async (req, res) => {
  * @apiGroup Vacations
  *
  * @apiParam {Number} vid Input vacations's id into the URL
- * @apiParam {Number} id Input date's id into the URL
+ * @apiParam {Number} id Input activity id into the URL
  * @apiHeader {String} authorization user's access token.
  *
  * @apiExample {js} Example usage
