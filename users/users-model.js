@@ -2,7 +2,8 @@ const db = require("../data/dbConfig");
 
 module.exports = {
   getVacationsArr,
-  getAllForUser
+  getAllForUser,
+  update
 };
 
 async function getUserVacationsIds(uid) {
@@ -132,4 +133,12 @@ async function getVacationsArr(uid) {
   } else {
     return { vacations: vacationsArr };
   }
+}
+
+async function update(changes, id) {
+  await db("users")
+    .updates(changes)
+    .where({ id });
+
+  return await getAllForUser(id);
 }
