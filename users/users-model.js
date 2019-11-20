@@ -54,7 +54,7 @@ async function getActivities(vid) {
 
 async function getVacations(vid) {
   return await db("vacations")
-    .select("name", "description")
+    .select("name", "description", "place", "picture")
     .where("id", vid)
     .first();
 }
