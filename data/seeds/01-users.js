@@ -4,32 +4,32 @@ const faker = require("faker");
 exports.seed = async function(knex) {
   return knex("users").insert([
     {
-      username: faker.name.firstName(),
+      username: "Adriel",
       password: `${bcrypt.hashSync("pass", 12)}`,
       avatar: faker.image.avatar()
     },
     {
-      username: faker.name.firstName(),
+      username: "Rey",
       password: `${bcrypt.hashSync("pass", 12)}`,
       avatar: faker.image.avatar()
     },
     {
-      username: faker.name.firstName(),
+      username: "Jamie",
       password: `${bcrypt.hashSync("pass", 12)}`,
       avatar: faker.image.avatar()
     },
     {
-      username: faker.name.firstName(),
+      username: "Denise",
       password: `${bcrypt.hashSync("pass", 12)}`,
       avatar: faker.image.avatar()
     },
     {
-      username: faker.name.firstName(),
+      username: "Monte",
       password: `${bcrypt.hashSync("pass", 12)}`,
       avatar: faker.image.avatar()
     },
     {
-      username: faker.name.firstName(),
+      username: "Adam",
       password: `${bcrypt.hashSync("pass", 12)}`,
       avatar: faker.image.avatar()
     }
