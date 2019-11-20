@@ -137,7 +137,7 @@ async function getVacationsArr(uid) {
 
 async function update(changes, id) {
   await db("users")
-    .updates(changes)
+    .update(changes)
     .where({ id });
 
   return await getAllForUser(id);
