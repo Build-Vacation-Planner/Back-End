@@ -1,10 +1,7 @@
 const db = require("../data/dbConfig");
 
 module.exports = {
-  getUserVacationsIds,
-  getComments,
-  getActivities,
-  getUsersInVacations,
+  getVacationsArr,
   getAllForUser
 };
 
@@ -78,6 +75,7 @@ async function getAllForUser(uid) {
 
       if (vacation) {
         return {
+          id: vacation.id,
           name: vacation.name,
           description: vacation.description,
           place: vacation.place,
@@ -97,5 +95,41 @@ async function getAllForUser(uid) {
     return { ...user, vacations: [] };
   } else {
     return { ...user, vacations: vacationsArr };
+  }
+}
+
+async function getVacationsArr(uid) {
+  const vacationsIds = await getUserVacationsIds(uid);
+
+  const vacationsArr = await Promise.all(
+    vacationsIds.map(async vid => {
+      const vacation = await getVacations(vid);
+      const dates = await getDates(vid);
+      const comments = await getComments(vid);
+      const activities = await getActivities(vid);
+      const users = await getUsersInVacations(vid, uid);
+
+      if (vacation) {
+        return {
+          id: vacation.id,
+          name: vacation.name,
+          description: vacation.description,
+          place: vacation.place,
+          picture: vacation.picture,
+          dates,
+          comments,
+          activities,
+          users
+        };
+      } else {
+        return;
+      }
+    })
+  );
+
+  if (vacationsArr[0] == null) {
+    return { vacations: [] };
+  } else {
+    return { vacations: vacationsArr };
   }
 }
