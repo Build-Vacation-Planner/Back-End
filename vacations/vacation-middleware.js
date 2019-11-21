@@ -2,7 +2,7 @@ const { body, validationResult } = require("express-validator");
 
 const dbVacations = require("./vacations-model");
 
-module.exports = { userIsOwner, validateVacation, attachVID };
+module.exports = { userIsOwner, validateVacation, attachVID, vacationIdExists };
 
 async function userIsOwner(req, res, next) {
   try {
@@ -48,4 +48,19 @@ async function validateVacation(req, res, next) {
 function attachVID(req, res, next) {
   req.vid = req.params.vid;
   next();
+}
+
+async function vacationIdExists(req, res, next) {
+  try {
+    const vacation = await dbVacations.getBy({ id: req.params.vid });
+
+    vacation
+      ? next()
+      : res
+          .status(400)
+          .json({ message: "Vacation with that ID doesn't exist" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to verify vacation ID" });
+  }
 }

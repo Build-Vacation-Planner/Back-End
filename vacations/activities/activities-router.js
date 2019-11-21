@@ -2,6 +2,10 @@ const router = require("express").Router();
 
 const dbActivities = require("./activities-model");
 const dbUsers = require("../../users/users-model");
+const {
+  canModifyActivity,
+  activityIdExists
+} = require("./activities-middleware");
 
 /**
  * @api {post} /api/vacations/:vid/activities/ Activities - Add
@@ -69,10 +73,21 @@ const dbUsers = require("../../users/users-model");
  *
  */
 router.post("/", async (req, res) => {
-  const { name } = req.body; //description
+  let activityData = {};
+  if (req.body.description)
+    activityData = { ...activityData, description: req.body.description };
+
+  if (req.body.name) {
+    activityData = { ...activityData, name: req.body.name };
+  } else {
+    res.status(400).json({ message: "Please provide the name field" });
+  }
 
   try {
-    const activity = await dbActivities.add({ name, vacation_id: req.vid });
+    const activity = await dbActivities.add({
+      ...activityData,
+      vacation_id: req.vid
+    });
     const vacationsArr = await dbUsers.getVacationsArr(req.decodedJwt.id);
 
     res.status(201).json(vacationsArr);
@@ -149,11 +164,21 @@ router.post("/", async (req, res) => {
  *
  */
 
-router.put("/:id", async (req, res) => {
-  const { name } = req.body; //conditional check name & description
+router.put("/:id", activityIdExists, canModifyActivity, async (req, res) => {
+  let changes = {};
+  if (req.body.description)
+    changes = { ...changes, description: req.body.description };
+
+  if (req.body.name) {
+    changes = { ...changes, name: req.body.name };
+  }
+
+  if (Object.getOwnPropertyNames(changes).length == 0) {
+    res.status(400).json({ message: "Please provide name or description" });
+  }
 
   try {
-    const activity = await dbActivities.update({ name }, req.params.id);
+    const activity = await dbActivities.update(changes, req.params.id);
     const vacationsArr = await dbUsers.getVacationsArr(req.decodedJwt.id);
 
     activity
@@ -228,7 +253,7 @@ router.put("/:id", async (req, res) => {
  *   },
  *
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", activityIdExists, canModifyActivity, async (req, res) => {
   try {
     const deleted = await dbActivities.remove(req.params.id);
     const vacationsArr = await dbUsers.getVacationsArr(req.decodedJwt.id);

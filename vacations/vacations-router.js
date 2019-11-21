@@ -5,20 +5,19 @@ const dbUsers = require("../users/users-model");
 const {
   userIsOwner,
   validateVacation,
-  attachVID
+  attachVID,
+  vacationIdExists
 } = require("./vacation-middleware");
 
 const activitiesRouter = require("./activities/activities-router");
-const placesRouter = require("./places/places-router");
 const commentsRouter = require("./comments/comments-router");
 const datesRouter = require("./dates/dates-router");
 const usersRouter = require("./users/users-router");
 
-router.use("/:vid/places", attachVID, placesRouter);
-router.use("/:vid/activities", attachVID, activitiesRouter);
-router.use("/:vid/comments", attachVID, commentsRouter);
-router.use("/:vid/dates", attachVID, datesRouter);
-router.use("/:vid/users", attachVID, usersRouter);
+router.use("/:vid/activities", vacationIdExists, attachVID, activitiesRouter);
+router.use("/:vid/comments", vacationIdExists, attachVID, commentsRouter);
+router.use("/:vid/dates", vacationIdExists, attachVID, datesRouter);
+router.use("/:vid/users", vacationIdExists, attachVID, usersRouter);
 
 /**
  * @api {post} /api/vacations/ Vacations - Add
@@ -57,11 +56,22 @@ router.use("/:vid/users", attachVID, usersRouter);
  *
  */
 router.post("/", validateVacation, async (req, res) => {
-  const { name } = req.body;
+  let vacationData = {};
+
+  if (req.body.description)
+    vacationData = { ...vacationData, description: req.body.description };
+  if (req.body.place) vacationData = { ...vacationData, place: req.body.place };
+  if (req.body.picture)
+    vacationData = { ...vacationData, picture: req.body.picture };
+  if (req.body.name) {
+    vacationData = { ...vacationData, name: req.body.name };
+  } else {
+    res.status(400).json({ message: "Please provide the required field name" });
+  }
 
   try {
     const { id } = req.decodedJwt;
-    const vacation = await dbVacations.add({ name, owner_id: id });
+    const vacation = await dbVacations.add({ ...vacationData, owner_id: id });
     const vacationsArr = await dbUsers.getVacationsArr(req.decodedJwt.id);
     res.status(201).json(vacationsArr);
   } catch (err) {
@@ -108,11 +118,23 @@ router.post("/", validateVacation, async (req, res) => {
  *  ]
  *
  */
-router.put("/:vid", userIsOwner, validateVacation, async (req, res) => {
-  const { name } = req.body;
+router.put("/:vid", vacationIdExists, userIsOwner, async (req, res) => {
+  let changes = {};
+
+  if (req.body.description)
+    changes = { ...changes, description: req.body.description };
+  if (req.body.place) changes = { ...changes, place: req.body.place };
+  if (req.body.picture) changes = { ...changes, picture: req.body.picture };
+  if (req.body.name) changes = { ...changes, name: req.body.name };
+
+  if (Object.getOwnPropertyNames(changes).length == 0) {
+    res.status(400).json({
+      message: "Please provide name, description, place or picture URL"
+    });
+  }
 
   try {
-    const vacation = await dbVacations.update({ name }, req.params.vid);
+    const vacation = await dbVacations.update(changes, req.params.vid);
     const vacationsArr = await dbUsers.getVacationsArr(req.decodedJwt.id);
     vacation
       ? res.status(202).json(vacationsArr)
@@ -155,7 +177,7 @@ router.put("/:vid", userIsOwner, validateVacation, async (req, res) => {
  *  ]
  *
  */
-router.delete("/:vid", userIsOwner, async (req, res) => {
+router.delete("/:vid", vacationIdExists, userIsOwner, async (req, res) => {
   try {
     const deleted = await dbVacations.remove(req.params.vid);
     const vacationsArr = await dbUsers.getVacationsArr(req.decodedJwt.id);

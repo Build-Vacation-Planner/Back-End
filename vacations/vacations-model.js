@@ -2,10 +2,9 @@ const db = require("../data/dbConfig");
 
 module.exports = { getBy, add, update, remove };
 
-function getBy(filter) {
-  return db("vacations")
+async function getBy(filter) {
+  return await db("vacations")
     .where(filter)
-    .returning(["id", "name", "owner_id"])
     .first();
 }
 

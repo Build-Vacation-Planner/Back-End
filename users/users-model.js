@@ -53,7 +53,7 @@ async function getActivities(vid) {
 
 async function getVacations(vid) {
   return await db("vacations")
-    .select("id", "name", "description", "place", "picture")
+    .select("id", "name", "description", "place", "picture", "owner_id")
     .where("id", vid)
     .first();
 }
@@ -81,6 +81,7 @@ async function getAllForUser(uid) {
           description: vacation.description,
           place: vacation.place,
           picture: vacation.picture,
+          owner_id: vacation.owner_id,
           dates,
           comments,
           activities,
@@ -117,6 +118,7 @@ async function getVacationsArr(uid) {
           description: vacation.description,
           place: vacation.place,
           picture: vacation.picture,
+          owner_id: vacation.owner_id,
           dates,
           comments,
           activities,

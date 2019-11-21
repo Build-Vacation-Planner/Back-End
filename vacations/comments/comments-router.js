@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const dbComments = require("./comments-model");
 const dbUsers = require("../../users/users-model");
+const { canModifyComment, commentIdExists } = require("./comments-middleware");
 
 /**
  * @api {post} /api/vacations/:vid/comments/ Comments - Add
@@ -67,11 +68,15 @@ const dbUsers = require("../../users/users-model");
  *
  */
 router.post("/", async (req, res) => {
-  const { body } = req.body;
-
+  let commentData = {};
+  if (req.body.body) {
+    commentData = { ...commentData, body: req.body.body };
+  } else {
+    res.status(400).json({ message: "Please provide the required body field" });
+  }
   try {
     const comment = await dbComments.add({
-      body,
+      ...commentData,
       created_by: req.decodedJwt.id,
       vacation_id: req.vid
     });
@@ -148,11 +153,16 @@ router.post("/", async (req, res) => {
  *   },
  *
  */
-router.put("/:id", async (req, res) => {
-  const { title, body } = req.body; //conditional check name & description
+router.put("/:id", commentIdExists, canModifyComment, async (req, res) => {
+  let changes = {};
+  if (req.body.body) {
+    changes = { ...changes, body: req.body.body };
+  } else {
+    res.status(400).json({ message: "Please provide the required body field" });
+  }
 
   try {
-    const comment = await dbComments.update({ title, body }, req.params.id);
+    const comment = await dbComments.update(changes, req.params.id);
     const vacationsArr = await dbUsers.getVacationsArr(req.decodedJwt.id);
     comment
       ? res.status(202).json(vacationsArr)
@@ -224,7 +234,7 @@ router.put("/:id", async (req, res) => {
  *   },
  *
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", commentIdExists, canModifyComment, async (req, res) => {
   try {
     const deleted = await dbComments.remove(req.params.id);
     const vacationsArr = await dbUsers.getVacationsArr(req.decodedJwt.id);

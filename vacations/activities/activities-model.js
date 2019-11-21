@@ -1,6 +1,12 @@
 const db = require("../../data/dbConfig");
 
-module.exports = { add, update, remove };
+module.exports = { getBy, add, update, remove };
+
+async function getBy(filter) {
+  return await db("comments")
+    .where(filter)
+    .first();
+}
 
 async function add(activity) {
   const [id] = await db("activities")
