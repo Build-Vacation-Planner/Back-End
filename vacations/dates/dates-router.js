@@ -2,7 +2,11 @@ const router = require("express").Router();
 
 const dbDates = require("./dates-model");
 const dbUsers = require("../../users/users-model");
-const { uniqueEntry } = require("./dates-middleware");
+const {
+  uniqueEntry,
+  canModifyDates,
+  datesIdExists
+} = require("./dates-middleware");
 
 /**
  * @api {post} /api/vacations/:vid/dates/ Dates - Add
@@ -70,11 +74,14 @@ const { uniqueEntry } = require("./dates-middleware");
  *
  */
 
-router.post("/", uniqueEntry, async (req, res) => {
-  const { start, end } = req.body;
+router.post("/", canModifyDates, uniqueEntry, async (req, res) => {
+  let datesData = {};
+
+  if (req.body.start) datesData = { ...datesData, start: req.body.start };
+  if (req.body.end) datesData = { ...datesData, end: req.body.start };
 
   try {
-    const dates = await dbDates.add({ start, end, vacation_id: req.vid });
+    const dates = await dbDates.add({ ...datesData, vacation_id: req.vid });
     const vacationsArr = await dbUsers.getVacationsArr(req.decodedJwt.id);
 
     res.status(201).json(vacationsArr);
@@ -150,11 +157,17 @@ router.post("/", uniqueEntry, async (req, res) => {
  *   },
  *
  */
-router.put("/:id", async (req, res) => {
-  const { start, end } = req.body; //conditionally check for these to exist in middleware
+router.put("/:id", datesIdExists, canModifyDates, async (req, res) => {
+  let changes = {};
 
+  if (req.body.start) changes = { ...changes, start: req.body.start };
+  if (req.body.end) changes = { ...changes, end: req.body.start };
+
+  if (Object.getOwnPropertyNames(changes) == 0) {
+    res.status(400).json({ message: "Please provide start or end date field" });
+  }
   try {
-    const dates = await dbDates.update({ start, end }, req.params.id);
+    const dates = await dbDates.update({ ...changes }, req.params.id);
     const vacationsArr = await dbUsers.getVacationsArr(req.decodedJwt.id);
     dates
       ? res.status(202).json(vacationsArr)
@@ -226,7 +239,7 @@ router.put("/:id", async (req, res) => {
  *   },
  *
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", datesIdExists, canModifyDates, async (req, res) => {
   try {
     const deleted = await dbDates.remove(req.params.id);
 
