@@ -194,9 +194,15 @@ router.put("/", async (req, res) => {
     changes = { ...changes, password: bcrypt.hashSync(req.body.password, 12) };
   }
 
-  try {
-    const result = dbUsers.update(changes, req.decodedJwt.id);
+  if (Object.getOwnPropertyNames(changes).length == 0) {
+    res
+      .status(400)
+      .json({ message: "Please provide username, avatar or password field" });
+  }
 
+  try {
+    await dbUsers.update(changes, req.decodedJwt.id);
+    const result = await dbUsers.getAllForUser(req.decodedJwt.id);
     res.status(202).json(result);
   } catch (err) {
     console.error(err);
