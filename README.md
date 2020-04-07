@@ -1,5 +1,6 @@
-# Back-End
-
+<h1 align="center">
+    Vacation Planner Back End
+</h1>
 Vacation Planner aims to simplify the hassle that organizing a trip can be through team collaboration.
 
 Read More on the [Technical Design Document](https://www.notion.so/Vacation-Planner-40691dab2db8449198cba4f5082a9982) and [Figma Design](https://www.figma.com/file/3o8AikckQX0Li1Bn9mhAID/Vacation-Planner---Dev-Team?node-id=312%3A3401)
@@ -7,6 +8,8 @@ Read More on the [Technical Design Document](https://www.notion.so/Vacation-Plan
 [Trello Board](https://trello.com/b/Q6KB7SiS/build-week-vacation-planner)
 
 The Nodejs backend server is deployed and documentation found [here](https://vacation-planner-be.herokuapp.com/docs/)
+
+_Note: This project was built in a week, and is no longer being worked on._
 
 ## Motivation
 
